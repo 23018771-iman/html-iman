@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Updates - Financial Transactions</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fde6e6; /* Light pink background */
+            color: #333; /* Dark text color */
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            min-height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .slides {
+            display: none;
+            text-align: center;
+            max-width: 800px;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: white;
+        }
+        .slides.active {
+            display: block;
+        }
+        .chart-container {
+            width: 100%; /* Full width */
+            max-width: 600px; /* Limit maximum width */
+            margin-bottom: 20px;
+        }
+        .transaction-info {
+            text-align: left;
+            font-size: 14px;
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+        .transaction-info p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="slides active" id="slide1">
+        <h2>Live Updates - Financial Transactions</h2>
+        <div class="chart-container">
+            <canvas id="barChart"></canvas>
+        </div>
+        <div class="transaction-info">
+            <p><strong>Date:</strong> <span id="transactionDate"></span></p>
+            <p><strong>Time:</strong> <span id="transactionTime"></span></p>
+            <p><strong>Category:</strong> <span id="transactionCategory"></span></p>
+            <p><strong>Amount:</strong> $<span id="transactionAmount"></span></p>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Function to update chart with new data
+    function updateChart(data) {
+        var ctx = document.getElementById('barChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: data.labels,
+                datasets: [{
+                    label: 'Financial Transactions',
+                    data: data.values,
+                    backgroundColor: [
+                        '#f7a8a8', // Light pink
+                        '#f27c7c', // Different shade of pink
+                        '#ee5b5b', // Darker shade of pink
+                        '#ff9999', // Lighter pink
+                        '#ff6666', // Medium pink
+                        '#ff3333'  // Darker pink
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    x: {
+                        stacked: true,
+                    },
+                    y: {
+                        beginAtZero: true,
+                        stacked: true
+                    }
+                }
+            }
+        });
+
+        // Adding interactivity - click event listener on bars
+        ctx.canvas.addEventListener('click', function(evt) {
+            var activePoints = myChart.getElementsAtEventForMode(evt, 'nearest', { intersect: true });
+            if (activePoints.length > 0) {
+                var datasetIndex = activePoints[0].datasetIndex;
+                var index = activePoints[0].index;
+                var label = myChart.data.labels[index];
+                var value = myChart.data.datasets[datasetIndex].data[index];
+                document.getElementById('transactionCategory').textContent = label;
+                document.getElementById('transactionAmount').textContent = value.toFixed(2);
+            }
+        });
+    }
+
+    // Function to generate random transaction data
+    function generateRandomData() {
+        var categories = ['Category 1', 'Category 2', 'Category 3', 'Category 4', 'Category 5'];
+        var labels = categories.map(function (category) {
+            return category.substring(0, 8); // Trim category labels if needed
+        });
+        var values = categories.map(function () {
+            return Math.floor(Math.random() * 100); // Random data points
+        });
+        return { labels: labels, values: values };
+    }
+
+    // Function to update transaction information
+    function updateTransactionInfo() {
+        var now = new Date();
+        document.getElementById('transactionDate').textContent = now.toLocaleDateString('en-US');
+        document.getElementById('transactionTime').textContent = now.toLocaleTimeString('en-US');
+    }
+
+    // Initial setup
+    var slideIndex = 0;
+    var slides = document.getElementsByClassName('slides');
+
+    // Function to show slides in a loop with live updates
+    function showSlides() {
+        var i;
+        for (i = 0; i < slides.length; i++) {
+            slides[i].style.display = 'none';
+        }
+        slideIndex++;
+        if (slideIndex > slides.length) {
+            slideIndex = 1;
+        }
+        slides[slideIndex - 1].style.display = 'block';
+
+        // Update chart with new data
+        var newData = generateRandomData();
+        updateChart(newData);
+
+        // Update transaction information
+        updateTransactionInfo();
+
+        setTimeout(showSlides, 5000); // Change slide every 5 seconds
+    }
+
+    // Start slideshow
+    showSlides();
+</script>
+
+</body>
+</html>
+

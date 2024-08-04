@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Wallet - Financefriend</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fde6e6; /* Light pink background */
+            color: #333; /* Dark text color */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            width: 100%;
+            max-width: 600px;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .card {
+            width: 100%;
+            padding: 20px;
+            background-color: white;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .card.active {
+            transform: translateY(-5px);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        }
+        .card h3 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+        .card p {
+            margin: 5px 0;
+        }
+        .details {
+            display: none;
+            margin-top: 10px;
+        }
+        .card.active .details {
+            display: block;
+        }
+        .transfer-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-top: 10px;
+        }
+        .transfer-button {
+            background-color: #f7a8a8;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .transfer-button:hover {
+            background-color: #f27c7c; /* Darker pink on hover */
+        }
+        .edit-button {
+            background-color: #ffcccc; /* Light red */
+            color: #333;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .edit-button:hover {
+            background-color: #ff9999; /* Darker red on hover */
+        }
+        .transfer-input {
+            display: none; /* Initially hidden */
+            margin-top: 10px;
+        }
+        .transfer-input label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .transfer-input input {
+            width: 100%;
+            padding: 8px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .max-amount {
+            font-size: 14px;
+            color: #888;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="card" onclick="toggleCard(this)">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h3 id="cardName1">Card 1</h3>
+            <button class="edit-button" onclick="editCardName('cardName1')">Edit</button>
+        </div>
+        <p>Card Number: 1234 5678 9012 3456</p>
+        <p>Expiration Date: 12/25</p>
+        <div class="details">
+            <p>Security Code: 123</p>
+            <p>Cardholder Name: John Doe</p>
+        </div>
+        <div class="transfer-container">
+            <button class="transfer-button" onclick="initiateTransfer('phone', '1234 5678 9012 3456')">Transfer to Phone Number</button>
+            <button class="transfer-button" onclick="initiateTransfer('account', '1234 5678 9012 3456')">Transfer to Account Number</button>
+        </div>
+        <div class="transfer-input" id="phoneTransfer">
+            <label for="phoneAmount">Enter amount to transfer to phone number:</label>
+            <input type="number" id="phoneAmount" name="phoneAmount" min="0" step="0.01" required>
+            <div class="max-amount">Maximum transfer amount: $1000</div>
+        </div>
+        <div class="transfer-input" id="accountTransfer">
+            <label for="accountAmount">Enter amount to transfer to account number:</label>
+            <input type="number" id="accountAmount" name="accountAmount" min="0" step="0.01" required>
+            <div class="max-amount">Maximum transfer amount: $5000</div>
+        </div>
+    </div>
+
+    <div class="card" onclick="toggleCard(this)">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h3 id="cardName2">Card 2</h3>
+            <button class="edit-button" onclick="editCardName('cardName2')">Edit</button>
+        </div>
+        <p>Card Number: 9876 5432 1098 7654</p>
+        <p>Expiration Date: 06/24</p>
+        <div class="details">
+            <p>Security Code: 456</p>
+            <p>Cardholder Name: Jane Smith</p>
+        </div>
+        <div class="transfer-container">
+            <button class="transfer-button" onclick="initiateTransfer('phone', '9876 5432 1098 7654')">Transfer to Phone Number</button>
+            <button class="transfer-button" onclick="initiateTransfer('account', '9876 5432 1098 7654')">Transfer to Account Number</button>
+        </div>
+        <div class="transfer-input" id="phoneTransfer2">
+            <label for="phoneAmount2">Enter amount to transfer to phone number:</label>
+            <input type="number" id="phoneAmount2" name="phoneAmount2" min="0" step="0.01" required>
+            <div class="max-amount">Maximum transfer amount: $1000</div>
+        </div>
+        <div class="transfer-input" id="accountTransfer2">
+            <label for="accountAmount2">Enter amount to transfer to account number:</label>
+            <input type="number" id="accountAmount2" name="accountAmount2" min="0" step="0.01" required>
+            <div class="max-amount">Maximum transfer amount: $5000</div>
+        </div>
+    </div>
+
+    <div class="card" onclick="toggleCard(this)">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h3 id="cardName3">Card 3</h3>
+            <button class="edit-button" onclick="editCardName('cardName3')">Edit</button>
+        </div>
+        <p>Card Number: 2468 1357 8024 6913</p>
+        <p>Expiration Date: 09/23</p>
+        <div class="details">
+            <p>Security Code: 789</p>
+            <p>Cardholder Name: Michael Johnson</p>
+        </div>
+        <div class="transfer-container">
+            <button class="transfer-button" onclick="initiateTransfer('phone', '2468 1357 8024 6913')">Transfer to Phone Number</button>
+            <button class="transfer-button" onclick="initiateTransfer('account', '2468 1357 8024 6913')">Transfer to Account Number</button>
+        </div>
+        <div class="transfer-input" id="phoneTransfer3">
+            <label for="phoneAmount3">Enter amount to transfer to phone number:</label>
+            <input type="number" id="phoneAmount3" name="phoneAmount3" min="0" step="0.01" required>
+            <div class="max-amount">Maximum transfer amount: $1000</div>
+        </div>
+        <div class="transfer-input" id="accountTransfer3">
+            <label for="accountAmount3">Enter amount to transfer to account number:</label>
+            <input type="number" id="accountAmount3" name="accountAmount3" min="0" step="0.01" required>
+            <div class="max-amount">Maximum transfer amount: $5000</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleCard(card) {
+        var cards = document.querySelectorAll('.card');
+        cards.forEach(function (c) {
+            c.classList.remove('active');
+        });
+        card.classList.toggle('active');
+    }
+
+    function editCardName(cardNameId) {
+        var newName = prompt('Enter a new name for the card:');
+        if (newName) {
+            document.getElementById(cardNameId).textContent = newName;
+        }
+    }
+
+    function initiateTransfer(option, cardNumber) {
+        var card = document.querySelector('.card.active');
+        if (!card) {
+            alert('Please select a card first.');
+            return;
+        }
+
+        var transferInput;
+        if (option === 'phone') {
+            transferInput = document.getElementById('phoneTransfer');
+        } else if (option === 'account') {
+            transferInput = document.getElementById('accountTransfer');
+        }
+
+        // Hide other transfer input fields
+        var allTransferInputs = document.querySelectorAll('.transfer-input');
+        allTransferInputs.forEach(function (input) {
+            input.style.display = 'none';
+        });
+
+        // Show the selected transfer input field
+        transferInput.style.display = 'block';
+
+        // Set the card number for context
+        transferInput.dataset.cardNumber = cardNumber;
+    }
+</script>
+
+</body>
+</html>
+
+

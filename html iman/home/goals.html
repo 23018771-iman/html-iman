@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spending Goals - Financefriend</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fde6e6; /* Light pink background */
+            color: #333; /* Dark text color */
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            display: flex;
+            flex-direction: column; /* Stack items vertically */
+            min-height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+            position: relative;
+        }
+        .caption {
+            text-align: left;
+            margin-bottom: 10px;
+            width: 100%;
+            display: flex;
+            align-items: center; /* Align items horizontally */
+        }
+        .caption label {
+            font-size: 18px; /* Increase font size */
+            margin-right: 10px; /* Add space between label and select */
+        }
+        .caption select {
+            font-size: 18px; /* Increase font size */
+            padding: 10px; /* Add padding */
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #fff;
+        }
+        .chart-container {
+            width: 100%; /* Full width */
+            max-width: 600px; /* Limit maximum width */
+            margin-bottom: 20px;
+        }
+        .goals-summary {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%; /* Full width */
+            max-width: 350px; /* Limit maximum width */
+            text-align: left; /* Align text to the left */
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+        .goals-summary h2 {
+            width: 100%; /* Full width */
+            font-size: 18px; /* Decreased font size */
+            margin-bottom: 10px;
+        }
+        .goals-summary .form-group {
+            margin-bottom: 20px;
+        }
+        .goals-summary label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px; /* Decreased font size */
+        }
+        .goals-summary input[type="range"] {
+            width: 100%;
+        }
+        .goals-summary .value {
+            display: block;
+            text-align: right;
+            font-weight: bold;
+            font-size: 14px; /* Decreased font size */
+        }
+        .goals-summary button {
+            width: 100%;
+            padding: 10px;
+            background-color: #f7a8a8; /* Light pink */
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        .goals-summary button:hover {
+            background-color: #f27c7c; /* Darker pink on hover */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="goals-summary">
+            <h2>Your Custom Spending Summary</h2>
+
+            <form id="spendingForm">
+                <div class="form-group">
+                    <label for="housing">Housing (%)</label>
+                    <input type="range" id="housing" name="housing" min="0" max="100" step="1" oninput="updateValue('housing')" required>
+                    <span class="value" id="housing-value">30</span>
+                </div>
+                <div class="form-group">
+                    <label for="transportation">Transportation (%)</label>
+                    <input type="range" id="transportation" name="transportation" min="0" max="100" step="1" oninput="updateValue('transportation')" required>
+                    <span class="value" id="transportation-value">20</span>
+                </div>
+                <div class="form-group">
+                    <label for="food">Food (%)</label>
+                    <input type="range" id="food" name="food" min="0" max="100" step="1" oninput="updateValue('food')" required>
+                    <span class="value" id="food-value">15</span>
+                </div>
+                <div class="form-group">
+                    <label for="entertainment">Entertainment (%)</label>
+                    <input type="range" id="entertainment" name="entertainment" min="0" max="100" step="1" oninput="updateValue('entertainment')" required>
+                    <span class="value" id="entertainment-value">10</span>
+                </div>
+                <div class="form-group">
+                    <label for="utilities">Utilities (%)</label>
+                    <input type="range" id="utilities" name="utilities" min="0" max="100" step="1" oninput="updateValue('utilities')" required>
+                    <span class="value" id="utilities-value">10</span>
+                </div>
+                <div class="form-group">
+                    <label for="other">Other (%)</label>
+                    <input type="range" id="other" name="other" min="0" max="100" step="1" oninput="updateValue('other')" required>
+                    <span class="value" id="other-value">15</span>
+                </div>
+                <button type="submit">Update Chart</button>
+            </form>
+        </div>
+
+        <div class="caption">
+            <label for="month">Spending goals for the month of:</label>
+            <select id="month" name="month" onchange="loadSpendingData(this.value)">
+                <option value="January">January</option>
+                <option value="February">February</option>
+                <option value="March">March</option>
+                <option value="April">April</option>
+                <option value="May">May</option>
+                <option value="June">June</option>
+                <option value="July">July</option>
+                <option value="August">August</option>
+                <option value="September">September</option>
+                <option value="October">October</option>
+                <option value="November">November</option>
+                <option value="December">December</option>
+            </select>
+        </div>
+
+        <div class="chart-container">
+            <canvas id="myPieChart"></canvas>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Initial data for the pie chart
+        const initialData = {
+            labels: ['Housing', 'Transportation', 'Food', 'Entertainment', 'Utilities', 'Other'],
+            datasets: [{
+                label: 'Spending Breakdown',
+                data: [30, 20, 15, 10, 10, 15],
+                backgroundColor: [
+                    '#f7a8a8', // Light pink
+                    '#f27c7c', // Different shade of pink
+                    '#ee5b5b', // Darker shade of pink
+                    '#ff9999', // Lighter pink
+                    '#ff6666', // Medium pink
+                    '#ff3333'  // Darker pink
+                ],
+                borderWidth: 1
+            }]
+        };
+
+        let myPieChart;
+
+        // Function to create or update the pie chart
+        function updateChart(data) {
+            const ctx = document.getElementById('myPieChart').getContext('2d');
+            if (myPieChart) {
+                myPieChart.data = data;
+                myPieChart.update();
+            } else {
+                myPieChart = new Chart(ctx, {
+                    type: 'pie',
+                    data: data,
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'right', // Positioning legend to the right
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(tooltipItem) {
+                                        return tooltipItem.label + ': ' + tooltipItem.raw.toFixed(1) + '%';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        // Function to update the displayed value of the sliders
+        function updateValue(id) {
+            const valueSpan = document.getElementById(`${id}-value`);
+            const slider = document.getElementById(id);
+            valueSpan.textContent = slider.value;
+        }
+
+        // Function to save spending data to localStorage
+        function saveSpendingData(month, housing, transportation, food, entertainment, utilities, other) {
+            const spendingData = {
+                month: month,
+                housing: housing,
+                transportation: transportation,
+                food: food,
+                entertainment: entertainment,
+                utilities: utilities,
+                other: other
+            };
+
+            // Convert object to JSON and save to localStorage
+            localStorage.setItem(month, JSON.stringify(spendingData));
+        }
+
+        // Function to load spending data from localStorage
+        function loadSpendingData(month) {
+            const spendingData = localStorage.getItem(month);
+            if (spendingData) {
+                const data = JSON.parse(spendingData);
+                document.getElementById('housing').value = data.housing;
+                document.getElementById('transportation').value = data.transportation;
+                document.getElementById('food').value = data.food;
+                document.getElementById('entertainment').value = data.entertainment;
+                document.getElementById('utilities').value = data.utilities;
+                document.getElementById('other').value = data.other;
+
+                updateValue('housing');
+                updateValue('transportation');
+                updateValue('food');
+                updateValue('entertainment');
+                updateValue('utilities');
+                updateValue('other');
+
+                const updatedData = {
+                    labels: ['Housing', 'Transportation', 'Food', 'Entertainment', 'Utilities', 'Other'],
+                    datasets: [{
+                        label: 'Spending Breakdown',
+                        data: [data.housing, data.transportation, data.food, data.entertainment, data.utilities, data.other],
+                        backgroundColor: [
+                            '#f7a8a8', // Light pink
+                            '#f27c7c', // Different shade of pink
+                            '#ee5b5b', // Darker shade of pink
+                            '#ff9999', // Lighter pink
+                            '#ff6666', // Medium pink
+                            '#ff3333'  // Darker pink
+                        ],
+                        borderWidth: 1
+                    }]
+                };
+
+                updateChart(updatedData);
+            }
+        }
+
+        // Handling form submission to update the chart
+        document.getElementById('spendingForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const month = document.getElementById('month').value;
+            const housing = parseInt(document.getElementById('housing').value);
+            const transportation = parseInt(document.getElementById('transportation').value);
+            const food = parseInt(document.getElementById('food').value);
+            const entertainment = parseInt(document.getElementById('entertainment').value);
+            const utilities = parseInt(document.getElementById('utilities').value);
+            const other = parseInt(document.getElementById('other').value);
+
+            const total = housing + transportation + food + entertainment + utilities + other;
+            
+            // Ensure percentages sum up to 100%
+            if (total !== 100) {
+                alert('Percentages must add up to 100%. Please adjust your values.');
+                return;
+            }
+
+            // Save the spending data to localStorage
+            saveSpendingData(month, housing, transportation, food, entertainment, utilities, other);
+
+            const updatedData = {
+                labels: ['Housing', 'Transportation', 'Food', 'Entertainment', 'Utilities', 'Other'],
+                datasets: [{
+                    label: 'Spending Breakdown',
+                    data: [housing, transportation, food, entertainment, utilities, other],
+                    backgroundColor: [
+                        '#f7a8a8', // Light pink
+                        '#f27c7c', // Different shade of pink
+                        '#ee5b5b', // Darker shade of pink
+                        '#ff9999', // Lighter pink
+                        '#ff6666', // Medium pink
+                        '#ff3333'  // Darker pink
+                    ],
+                    borderWidth: 1
+                }]
+            };
+
+            // Update the chart with new data
+            updateChart(updatedData);
+        });
+
+        // Initial creation of the pie chart
+        updateChart(initialData);
+
+        // Load spending data for the initial month (January for example)
+        const initialMonth = document.getElementById('month').value;
+        loadSpendingData(initialMonth);
+    </script>
+
+</body>
+</html>
+

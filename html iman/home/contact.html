@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Financefriend</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fde6e6; /* Light pink background */
+            color: #333; /* Dark text color */
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .form-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 400px; /* Increased width */
+            text-align: center;
+        }
+        .form-container h2 {
+            margin-bottom: 20px;
+        }
+        .form-container label {
+            display: block;
+            margin-bottom: 8px;
+        }
+        .form-container input,
+        .form-container textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            resize: vertical; /* Allow vertical resizing of textarea */
+        }
+        .form-container button {
+            width: 100%;
+            padding: 10px;
+            background-color: #f27c7c; /* Light pink button */
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .form-container button:hover {
+            background-color: #ee5b5b; /* Darker pink on hover */
+        }
+
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .popup button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            border: none;
+            background-color: #4caf50;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .popup button:hover {
+            background-color: #45a049;
+        }
+        .show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="form-container">
+            <h2>Contact Us</h2>
+            <p>Have a question or feedback for us? Reach out using the form below.</p>
+            <form id="contact-form">
+                <label for="name-input">Your Name:</label>
+                <input type="text" id="name-input" name="name" required>
+
+                <label for="email-input">Your Email:</label>
+                <input type="email" id="email-input" name="email" required>
+
+                <label for="message-input">Message:</label>
+                <textarea id="message-input" name="message" rows="5" required></textarea>
+
+                <button type="submit">Send Message</button>
+
+            </form>
+        </div>
+    </div>
+
+    <div class="popup" id="popup">
+        <p>Message sent</p>
+        <button onclick="hidePopup()">OK</button>
+    </div>
+
+    <script>
+        const form = document.getElementById('contact-form');
+        const popup = document.getElementById('popup');
+        const formContainer = document.getElementById('form-container');
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            formContainer.classList.add('hide');
+            popup.classList.add('show');
+        });
+
+        function hidePopup() {
+            popup.classList.remove('show');
+            form.reset();
+        }
+    </script>
+
+</body>
+</html>
+

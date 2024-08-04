@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login / Signup Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fde6e6; /* Light pink background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #fff; /* White container background */
+            padding: 40px; /* Increased padding */
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 400px; /* Increased width */
+        }
+        .container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333; /* Dark text color */
+            font-size: 24px; /* Increased font size */
+        }
+        .container form {
+            display: none;
+        }
+        .container form.active {
+            display: block;
+        }
+        .container label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333; /* Dark text color */
+            font-size: 16px; /* Increased font size */
+        }
+        .container input {
+            width: 100%;
+            padding: 15px; /* Increased padding */
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px; /* Increased font size */
+        }
+        .container button {
+            width: 100%;
+            padding: 15px; /* Increased padding */
+            background-color: #f7a8a8; /* Light pink button background */
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 18px; /* Increased font size */
+        }
+        .container button:hover {
+            background-color: #f27c7c; /* Darker pink hover for button */
+        }
+        .toggle-link {
+            text-align: center;
+            margin-top: 10px;
+            color: #f7a8a8; /* Light pink text color */
+            cursor: pointer;
+            font-size: 16px; /* Increased font size */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2 id="form-title">Login</h2>
+        <form id="login-form" class="active">
+            <label for="login-username">Username</label>
+            <input type="text" id="login-username" name="username" required>
+
+            <label for="login-password">Password</label>
+            <input type="password" id="login-password" name="password" required>
+            <div>
+                <a href="wallet.html"><button type="submit">Login</a></button>
+            </div>
+        </form>
+
+        <form id="signup-form">
+            <label for="signup-username">Username</label>
+            <input type="text" id="signup-username" name="username" required>
+
+            <label for="signup-email">Email</label>
+            <input type="email" id="signup-email" name="email" required>
+
+            <label for="signup-password">Password</label>
+            <input type="password" id="signup-password" name="password" required>
+
+            <button type="submit">Sign Up</button>
+        </form>
+
+        <div class="toggle-link" onclick="toggleForms()">Don't have an account? Sign up</div>
+    </div>
+
+    <script>
+        function toggleForms() {
+            const loginForm = document.getElementById('login-form');
+            const signupForm = document.getElementById('signup-form');
+            const formTitle = document.getElementById('form-title');
+            const toggleLink = document.querySelector('.toggle-link');
+
+            if (loginForm.classList.contains('active')) {
+                loginForm.classList.remove('active');
+                signupForm.classList.add('active');
+                formTitle.textContent = 'Sign Up';
+                toggleLink.textContent = 'Already have an account? Login';
+            } else {
+                signupForm.classList.remove('active');
+                loginForm.classList.add('active');
+                formTitle.textContent = 'Login';
+                toggleLink.textContent = "Don't have an account? Sign up";
+            }
+        }
+    </script>
+
+</body>
+</html>
+

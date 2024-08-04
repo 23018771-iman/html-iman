@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Budget Tools - Financefriend</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fde6e6; /* Light pink background */
+            color: #333; /* Dark text color */
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .form-container {
+            background-color: #f7a8a8; /* Darker pink background */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 1200px; /* Increased width for more horizontal layout */
+            display: flex;
+            flex-direction: row; /* Horizontal layout */
+            justify-content: space-between; /* Space between elements */
+            align-items: center;
+        }
+        .form-section {
+            flex: 1;
+            margin: 0 10px;
+        }
+        .form-section h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .form-section label {
+            display: block;
+            margin-bottom: 8px;
+        }
+        .form-section select,
+        .form-section input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .form-section button {
+            width: 100%;
+            padding: 10px;
+            background-color: #f27c7c; /* Different shade of pink */
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .form-section button:hover {
+            background-color: #ee5b5b; /* Darker shade of pink on hover */
+        }
+        .form-section .topup-options {
+            margin-bottom: 20px;
+        }
+        .form-section .topup-options label {
+            margin-right: 10px;
+        }
+        .num-pad-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .num-pad {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 300px;
+            margin-bottom: 20px;
+        }
+        .num-pad button {
+            width: 30%;
+            padding: 20px;
+            margin-bottom: 10px;
+            background-color: #f27c7c; /* Same shade of pink */
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        .num-pad button:hover {
+            background-color: #ee5b5b; /* Darker shade of pink on hover */
+        }
+        .slide-container {
+            width: 100%;
+            max-width: 300px;
+            padding: 50px;
+            background-color: #333; /* Dark background */
+            color: white; /* White text */
+            border: none;
+            border-radius: 4px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .slide-button {
+            width: 50px;
+            height: 50px;
+            background-color: #f27c7c;
+            position: absolute;
+            left: 0;
+            top: 0;
+            border-radius: 4px;
+            transition: left 0.3s;
+            cursor: pointer;
+        }
+        .slide-container:hover ,slide-button {
+            background-color: #ee5b5b;
+        }
+        .slide-container span {
+            position: absolute;
+            right: 10px;
+        }
+    </style>
+</head>
+<body>
+
+ <div class="container">
+     <div class="form-container">
+         <div class="form-section">
+            <h2>Top-up</h2>
+            <form id="topup-form">
+                <label for="wallet-select">Select Wallet:</label>
+                <select id="wallet-select" name="wallet">
+                     <option value="wallet1">Housing</option>
+                     <option value="wallet2">Transportation</option>
+                     <option value="wallet3">Food</option>
+                     <option value="wallet4">Entertainment</option>
+                     <option value="wallet5">Utilities</option>
+                     <option value="wallet6">Others</option>
+                </select>
+
+                <label for="from-wallet-select">Transfer From:</label>
+                <select id="from-wallet-select" name="from-wallet">
+                    <option value="bank">Visa 2719</option>
+                    <option value="creditcard">Apple Pay</option>
+                    <option value="paypal">PayPal</option>
+                 </select>
+
+                <label for="amount-input">Enter Amount:</label>
+                <input type="number" id="amount-input" name="amount" min="0" step="any" required>
+                
+                </form>
+            </div>
+
+            <div class="num-pad-section">
+                <div class="num-pad">
+                    <button type="button">1</button>
+                    <button type="button">2</button>
+                    <button type="button">3</button>
+                    <button type="button">4</button>
+                    <button type="button">5</button>
+                    <button type="button">6</button>
+                    <button type="button">7</button>
+                    <button type="button">8</button>
+                    <button type="button">9</button>
+                    <button type="button">0</button>
+                </div>
+                <div class="slide-container" id="slide-container">
+                    <div class="slide-button" id="slide-button"></div>
+                    <span>Slide to Top-Up</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const slideButton = document.getElementById('slide-button')
+    const slideContainer = document.getElementById('slide-container');
+    let isSliding = false;
+    let startx = 0;
+
+    slideButton.addEventListener('mousedown', (e) => {
+        isSliding = true;
+        startX = e.clientX - slideButton.offsetLeft;
+        slideButton.style.transition = 'none'; // Disable transition during drag
+    });
+
+    document.addEventListener('mouseup' , () => {
+        if (isSliding) {
+            isSliding = false;
+            slideButton.style.transition = 'left 0.3s'; //Re-enable transition after drag
+            if (slideButton.offsetLeft + slideButtonsetWidth >= slideContainer.offsetWidth) {
+                window.location.href = 'wallet.html';
+            } else {
+                slideButton.style.left= '0px';
+        }
+    });
+
+    document.addEventListener('mousemove', (e) => {
+        if (isSliding) {
+            let moveX = e.clientX - startX;
+            if (moveX < 0) moveX = 0;
+            if (moveX + slideButton.offsetWidth > slideContainer.offsetWidth) moveX = slideContainer.offsetWidth - slideButton.offsetWidth
+            slideButton.style.left = moveX + 'px';
+        }
+    });
+</script>
+
+</body>
+</html>
+
+
+

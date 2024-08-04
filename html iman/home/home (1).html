@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Financefriend</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fde6e6; /* Light pink background */
+            color: #333; /* Dark text color */
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            position: relative; /* Added for positioning images */
+        }
+        .content {
+            text-align: center;
+            z-index: 1; /* Ensure content is above images */
+        }
+        .content h1 {
+            font-size: 2.5em; /* Increase font size for h1 */
+            margin-bottom: 10px; /* Adjust spacing */
+        }
+        .content p {
+            font-size: 1.2em; /* Increase font size for p */
+            line-height: 1.6; /* Adjust line height */
+        }
+        .menu {
+            position: absolute;
+            top: 20px;
+            left: 20px; /* Adjusted position to left */
+            z-index: 1; /* Ensure menu is above images */
+        }
+        .menu ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+        }
+        .menu ul li {
+            margin-left: 10px;
+        }
+        .menu ul li a {
+            text-decoration: none;
+            color: #333; /* Dark text color */
+            padding: 5px 15px; /* Increased padding for menu items */
+            border-radius: 4px;
+            background-color: #f7a8a8; /* Light pink */
+            display: block;
+            text-align: center;
+        }
+        .menu ul li a:hover {
+            background-color: #f27c7c; /* Darker pink on hover */
+        }
+        .menu .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f7a8a8; /* Light pink */
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            left: 0; /* Ensure dropdown aligns with parent */
+            top: 100%; /* Position dropdown below parent */
+            width: 200px; /* Increased width for dropdown */
+        }
+        .menu .dropdown-item:hover .dropdown-content {
+            display: block;
+        }
+        .menu .sub-dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f27c7c; /* Darker pink */
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            left: 100%; /* Position sub-dropdown to the right of parent */
+            top: 0;
+            z-index: 1;
+            width: 200px; /* Increased width for sub-dropdown */
+        }
+        .menu .sub-dropdown-item:hover .sub-dropdown-content {
+            display: block;
+        }
+        .login-signup {
+            position: absolute;
+            top: 20px;
+            right: 20px; /* Adjusted position to right */
+            z-index: 1; /* Ensure login/signup link is above images */
+        }
+        .login-signup a {
+            text-decoration: none;
+            color: #333; /* Dark text color */
+            padding: 5px 15px; /* Increased padding for login/signup */
+            border-radius: 4px;
+            background-color: #f7a8a8; /* Light pink */
+        }
+        .login-signup a:hover {
+            background-color: #f27c7c; /* Darker pink on hover */
+        }
+        /* Styling for images */
+        .images {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 0; /* Ensure images are behind content */
+            display: flex;
+            justify-content: space-around;
+            width: 200px;
+        }
+        .images img {
+            width: 50px; /* Adjust image size */
+            height: auto;
+            margin: 10px;
+            border-radius: 50%; /* Rounded corners */
+            background-color: #fff; /* White background for circle */
+            padding: 5px; /* Space around image */
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="menu">
+        <ul>
+            <li class="dropdown-item">
+                <a href="#">Menu &#9662;</a>
+                <div class="dropdown-content">
+                    <a href="#">Real-time Updates</a>
+                    <a href="#">Financial Goals</a>
+                    <a href="#">Financial Hub</a>
+                    <a href="contact.html">Contact Us</a>
+                    <div class="sub-dropdown-item">
+                        <a href="#">Digital Wallet &#9662;</a>
+                        <div class="sub-dropdown-content">
+                            <a href="#">Top-up Wallet</a>
+                            <a href="#">Transfer Money</a>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <div class="login-signup">
+        <a href="login.html">Login / Signup</a>
+    </div>
+
+    <div class="container">
+        <div class="content">
+            <h1>Welcome to Financefriend</h1>
+            <p>Your one-stop for easing your financial worries</p>
+        </div>
+    </div>
+
+</body>
+</html>
+
+
+
